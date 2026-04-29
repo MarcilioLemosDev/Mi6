@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"LOGUS: sessão iniciada. Execute /cadencia-curta antes de tocar código — leia PROJECT.md SPRINT ATUAL, Baseline e hipóteses com o humano.\""
+          }
+        ]
+      }
+    ]
+  }
+}
