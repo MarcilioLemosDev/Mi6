@@ -90,6 +90,7 @@
 ## BACKLOG
 
 - Criar runner ou comando de execução somente se a execução manual via terminal revelar fricção concreta.
+- Mecanizar sincronização com remote no fim de sessão — IA declarou 'estado limpo' com commit não pushado, princípio 'fonte única no repo' ficou dependente de memória humana. Tratar como MECHANIZATION-004 após S01.
 - Criar `tools/` dentro de um agente somente quando houver uma ferramenta local nomeada e necessária.
 - Definir próximos agentes da Mi6 após validação do `observador-bacen`.
 - Publicar `/status`, `/sprint` e `/health` quando houver necessidade de visualização externa.
