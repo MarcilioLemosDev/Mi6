@@ -82,8 +82,8 @@
 
 | Sprint | Conquista planejada |
 |--------|---------------------|
-| S02 | Resolver a consulta dinâmica da busca pública do Bacen, provavelmente por endpoint direto da API usada pela SPA ou execução headless, sem quebrar a abstração `pasta = agente`. |
-| S03 | A definir após validação do primeiro agente funcional. |
+| S02 | Resolver a consulta dinâmica da busca pública do Bacen e os ajustes de auditoria que bloqueiam execução real: evidência mínima para `sem comunicado encontrado`, MECHANIZATION-003 sobre baseline de sprint e separação entre identidade do agente e modo manual. |
+| S03 | A definir após S02; candidatos naturais são agendamento operacional do `observador-bacen` ou próximo agente da Mi6. |
 
 ---
 
@@ -96,9 +96,8 @@
 - Publicar `/status`, `/sprint` e `/health` quando houver necessidade de visualização externa.
 - Avaliar se runs locais precisam gerar resumos versionados sem expor logs brutos.
 - Avaliar mitigação técnica para prompt injection em conteúdo externo se o primeiro processo mostrar risco recorrente.
-- Resolver a limitação observada na T04: a busca pública do Bacen retornou shell SPA via `Invoke-WebRequest`; S02 deve investigar endpoint direto da API consumida pela SPA ou fetch headless.
+- Antes de qualquer agendamento automático, declarar fuso operacional do agente (`America/Sao_Paulo` ou convenção escolhida) e registrar fuso/fonte de data em toda run.
 - Após S01, decidir e mecanizar a convenção de duração do sprint atômico: manter `Fim = Início + 3 dias` como 4 dias de calendário e declarar explicitamente no LOGUS, ou alterar `validate.py` conforme a convenção escolhida.
-- Verificador de Trajetória deve avaliar na auditoria S01 se a regra `Execute apenas o processo solicitado manualmente pelo humano no terminal` é invariante real do agente ou regra do modo de operação manual; agendamento automático futuro exigirá reescrita dessa regra.
 
 ---
 
@@ -107,6 +106,7 @@
 | Sprint | Data | Crítico | Alto | Médio | Baixo |
 |--------|------|---------|------|-------|-------|
 | S00 | 2026-04-28 | 0 | 0 | 0 | 0 |
+| S01 | 2026-04-30 | 0 | 0 | 5 | 2 |
 
 ---
 
