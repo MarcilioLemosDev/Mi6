@@ -54,6 +54,7 @@
 | Fim de sprint | regra | IA | sugerir `/auditoria-sprint` |
 | Fim de auditoria | regra | IA | apresentar próximo ponto de peso ao humano |
 | Falha de fluxo percebida | regra | IA | rodar `/auditoria-mecanizacao` |
+| Retorno de escala percebido | regra | IA | sugerir `/retroalimentar` |
 | Destino de achado | peso | humano | task-próximo-sprint / aceita / backlog |
 | Mutação macro | peso | humano | ajustar MAPA, BACKLOG ou SPRINT ATUAL |
 
@@ -97,8 +98,12 @@
 - Avaliar se runs locais precisam gerar resumos versionados sem expor logs brutos.
 - Avaliar mitigação técnica para prompt injection em conteúdo externo se o primeiro processo mostrar risco recorrente.
 - Antes de qualquer agendamento automático, declarar fuso operacional do agente (`America/Sao_Paulo` ou convenção escolhida) e registrar fuso/fonte de data em toda run.
-- Após S01, decidir e mecanizar a convenção de duração do sprint atômico: manter `Fim = Início + 3 dias` como 4 dias de calendário e declarar explicitamente no LOGUS, ou alterar `validate.py` conforme a convenção escolhida.
-- Investigar mecanismo de retroalimentação framework: agente ou cadência que, ao identificar achados de auditoria que são falhas do próprio framework (não do produto), gera proposta de mecanização versionável pro repo logus-template. Hoje achados de framework ficam órfãos no backlog do projeto. Tratar como Diálogo candidato no LOGUS, não como feature do Mi6. Discussão da forma do princípio fica fora deste repo.
+
+### Pendências no framework
+
+- [ ] FRAMEWORK-FEEDBACK-001 - Convencao de sprint de 3 dias - status: aberto - PR/issue: pendente
+- [ ] FRAMEWORK-FEEDBACK-002 - Baseline antes da execucao da sprint - status: aberto - PR/issue: pendente
+- [ ] FRAMEWORK-FEEDBACK-003 - Invariante do agente vs modo de operacao - status: aberto - PR/issue: pendente
 
 ---
 
