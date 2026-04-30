@@ -51,8 +51,8 @@
 | Início de task | regra | IA | confirmar hipótese antes de tocar código |
 | Fim de task | regra | IA | validar, renderizar, mostrar checkpoint visual e pedir `ok` para seguir |
 | Fim de ciclo operacional | regra | IA | apresentar desdobramento natural direcionado para próxima decisão humana |
-| Fim de sprint | regra | IA | sugerir `/auditoria-sprint` |
-| Fim de auditoria | regra | IA | apresentar próximo ponto de peso ao humano |
+| Fim de sprint | regra | IA | sugerir `/auditoria-sprint` e, se houver múltiplos caminhos, `/agenda-alavancas` |
+| Fim de auditoria | regra | IA | apresentar próximo ponto de peso e agenda de alavancas |
 | Falha de fluxo percebida | regra | IA | rodar `/auditoria-mecanizacao` |
 | Retorno de escala percebido | regra | IA | sugerir `/retroalimentar` |
 | Destino de achado | peso | humano | task-próximo-sprint / aceita / backlog |

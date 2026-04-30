@@ -28,6 +28,8 @@ VALID_TASK_STATUS = {"todo", "doing", "done", "bloqueado"}
 VALID_EPIC_STATUS = {"[ ]", "[~]", "[x]"}
 VALID_TRIGGER_TYPES = {"regra", "peso"}
 VALID_DEPTHS = {"leve", "profundo"}
+VALID_FRAMEWORK_FEEDBACK_STATUS = {"aberto", "pr-aberto", "mergeado", "recusado"}
+SPRINT_LENGTH_DAYS = 3
 
 REQUIRED_AGENTS = {
     "Sentinela",
@@ -45,6 +47,7 @@ REQUIRED_TRIGGERS = {
     "Fim de sprint": ("regra", "IA"),
     "Fim de auditoria": ("regra", "IA"),
     "Falha de fluxo percebida": ("regra", "IA"),
+    "Retorno de escala percebido": ("regra", "IA"),
     "Destino de achado": ("peso", "humano"),
     "Mutação macro": ("peso", "humano"),
 }
@@ -56,6 +59,10 @@ PROTOCOL_FILES = [
     ".claude/commands/cadencia-curta.md",
     ".claude/commands/auditoria-sprint.md",
     ".claude/commands/auditoria-mecanizacao.md",
+    ".claude/commands/retroalimentar.md",
+    ".claude/commands/agenda-alavancas.md",
+    "dialogos/VIII-retroalimentacao-de-escala.md",
+    "dialogos/IX-agenda-de-alavancas.md",
 ]
 
 WEAK_PROTOCOL_TERMS = {"tenta", "tentar", "tentamos", "idealmente"}
@@ -253,8 +260,11 @@ def validate_sprint(sections, strict, errors):
             errors.append("SPRINT ATUAL: `Início` deve usar YYYY-MM-DD.")
         if not end_date:
             errors.append("SPRINT ATUAL: `Fim` deve usar YYYY-MM-DD.")
-        if start_date and end_date and end_date - start_date != timedelta(days=3):
-            errors.append("SPRINT ATUAL: `Fim` deve estar 3 dias após `Início`.")
+        if start_date and end_date and end_date - start_date != timedelta(days=SPRINT_LENGTH_DAYS):
+            errors.append(
+                "SPRINT ATUAL: `Fim` deve ser `Início + 3 dias`; "
+                "`Fim` é limite de encerramento do ciclo, não dia adicional de trabalho."
+            )
 
 
 def validate_triggers(sections, strict, errors):
@@ -326,6 +336,77 @@ def validate_tasks(sections, strict, errors):
             require_present(errors, f"Tasks linha {index}", row.get("Critério de aceite", ""), "Critério de aceite")
 
 
+def subsection(section, title):
+    found = False
+    lines = []
+
+    for line in section.splitlines():
+        if line.startswith("### "):
+            heading = line[4:].strip()
+            if found:
+                break
+            found = heading == title
+            continue
+        if found:
+            lines.append(line)
+
+    return "\n".join(lines).strip(), found
+
+
+def is_placeholder_link(value):
+    return is_blank_or_placeholder(value) or normalize(value).lower() in {"n/a", "none", "-"}
+
+
+def validate_framework_feedback(sections, strict, errors):
+    backlog = sections.get("BACKLOG", "")
+    feedback_text, found = subsection(backlog, "Pendências no framework")
+
+    if "FRAMEWORK-FEEDBACK-" in backlog and not found:
+        errors.append("BACKLOG: itens FRAMEWORK-FEEDBACK devem ficar na subseção `Pendências no framework`.")
+        return
+
+    if not found:
+        return
+
+    item_pattern = re.compile(
+        r"^-\s*\[(?P<done>[ xX])\]\s*"
+        r"(?P<id>FRAMEWORK-FEEDBACK-\d{3,})\b"
+        r".*?\bstatus:\s*(?P<status>[a-z-]+)\b"
+        r"(?:\s*-\s*PR/issue:\s*(?P<link>.+))?",
+        re.IGNORECASE,
+    )
+
+    for line in feedback_text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("<!--") or stripped.startswith("-->"):
+            continue
+        if "FRAMEWORK-FEEDBACK-" not in stripped:
+            continue
+
+        match = item_pattern.match(stripped)
+        if not match:
+            errors.append(
+                "BACKLOG Pendências no framework: item deve usar "
+                "`- [ ] FRAMEWORK-FEEDBACK-001 - título - status: aberto - PR/issue: link`."
+            )
+            continue
+
+        done = match.group("done").lower() == "x"
+        feedback_id = match.group("id")
+        status = normalize(match.group("status")).lower()
+        link = normalize(match.group("link") or "")
+
+        if status not in VALID_FRAMEWORK_FEEDBACK_STATUS:
+            valid = ", ".join(sorted(VALID_FRAMEWORK_FEEDBACK_STATUS))
+            errors.append(f"BACKLOG {feedback_id}: status `{status}` inválido; use {valid}.")
+
+        if done and status not in {"mergeado", "recusado"}:
+            errors.append(f"BACKLOG {feedback_id}: item marcado [x] exige status `mergeado` ou `recusado`.")
+
+        if status in {"pr-aberto", "mergeado", "recusado"} and is_placeholder_link(link):
+            errors.append(f"BACKLOG {feedback_id}: status `{status}` exige link remoto em `PR/issue`.")
+
+
 def validate_audits(sections, errors):
     rows = table_with_headers(sections.get("AUDITORIAS", ""), ["Sprint", "Data", "Crítico", "Alto", "Médio", "Baixo"])
     if not rows:
@@ -393,6 +474,7 @@ def validate(root, mode):
     validate_triggers(sections, strict, errors)
     validate_recipe(sections, strict, errors)
     validate_tasks(sections, strict, errors)
+    validate_framework_feedback(sections, strict, errors)
     validate_audits(sections, errors)
     validate_public_derivative(gitignore, errors)
     validate_protocol_language(root, errors)

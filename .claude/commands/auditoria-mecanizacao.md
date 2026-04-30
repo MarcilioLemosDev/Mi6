@@ -42,6 +42,7 @@ Exemplos:
 6. Gere `audits/MECHANIZATION-XXX.md`, sem substituir auditorias de sprint.
 7. Ao final, apresente o próximo ponto de peso ao humano.
 8. Se a falha envolveu ausência de desdobramento, atualize também a regra que encerra o ciclo afetado.
+9. Se a mecanização necessária pertencer ao `logus-template` e a execução estiver ocorrendo em projeto-folha, encaminhe para `/retroalimentar` antes de encerrar.
 
 ## Regra de integridade
 

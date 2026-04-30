@@ -8,7 +8,7 @@ Template de repositório para projetos usando o **Framework LOGUS** — Awake So
 
 Ponto de partida para qualquer projeto Awake. Contém a estrutura completa do framework: especificação algorítmica, fonte única de verdade, sistema de auditoria adaptativa com cinco subagents, e render automático das três vistas HTML.
 
-Baseado nos sete diálogos fundadores do LOGUS.
+Baseado nos diálogos fundadores do LOGUS, materializados em `dialogos/`.
 
 ---
 
@@ -32,7 +32,7 @@ Abra `PROJECT.md` e preencha os campos marcados com `<!-- PREENCHA: ... -->`:
 - **NORTE** — o que o projeto entrega, para quem, e por quê
 - **MAPA** — épicos em ordem lógica
 - **STACK** — tecnologias e versões
-- **SPRINT ATUAL** — conquista do primeiro sprint, baseline e tasks com critério de aceite
+- **SPRINT ATUAL** — conquista do primeiro sprint, datas, tasks com critério de aceite e baseline pós-declaração
 - **CLIENTE** — dados de contato
 
 As demais seções são preenchidas ao longo do projeto.
@@ -46,7 +46,7 @@ python scripts/render.py
 
 Abre `/public/status.html`, `/public/sprint.html`, `/public/health.html` no browser.
 
-Use `python scripts/validate.py --mode project` antes de auditar um projeto real. Esse modo exige campos preenchidos, baseline, sprint de 3 dias, gatilhos, receita de auditoria e tasks válidas.
+Use `python scripts/validate.py --mode project` antes de auditar um projeto real. Esse modo exige campos preenchidos, baseline, sprint com `Fim = Início + 3 dias`, gatilhos, receita de auditoria e tasks válidas.
 
 ### 4. Configure o deploy automático
 
@@ -61,6 +61,9 @@ A partir daí, cada push que toca `PROJECT.md` ou `audits/` regenera e publica a
 ```
 ├── PROJECT.md                    # Fonte única da verdade
 ├── LOGUS.md                      # Especificação algorítmica do framework
+├── dialogos/
+│   ├── VIII-retroalimentacao-de-escala.md
+│   └── IX-agenda-de-alavancas.md
 ├── audits/
 │   └── AUDIT-S00.md             # Auditoria por sprint (gerada ao fim de cada um)
 ├── .claude/agents/
@@ -83,13 +86,14 @@ A partir daí, cada push que toca `PROJECT.md` ou `audits/` regenera e publica a
 ## Ciclo de um sprint
 
 ```
-1. Preenche SPRINT ATUAL no PROJECT.md (conquista + datas + baseline + tasks + receita de auditoria)
-2. Desenvolve
-3. Ao fim do sprint, roda os cinco subagents em contextos isolados
-4. Consolida achados em audits/AUDIT-SXX.md
-5. Atualiza tabela AUDITORIAS no PROJECT.md
-6. Decide destino de cada achado (task / aceita / backlog)
-7. Push → páginas regeneram automaticamente
+1. Preenche SPRINT ATUAL no PROJECT.md (conquista + datas + tasks + receita de auditoria)
+2. Humano aprova o sprint e registra Baseline pós-declaração
+3. Desenvolve
+4. Ao fim do sprint, roda os cinco subagents em contextos isolados
+5. Consolida achados em audits/AUDIT-SXX.md
+6. Atualiza tabela AUDITORIAS no PROJECT.md
+7. Decide destino de cada achado (task / aceita / backlog)
+8. Push → páginas regeneram automaticamente
 ```
 
 ---
@@ -109,6 +113,24 @@ A partir daí, cada push que toca `PROJECT.md` ou `audits/` regenera e publica a
 Se o humano precisar lembrar um princípio do LOGUS, isso não é falha humana; é falha de mecanização.
 
 Quando acontecer, rode `/auditoria-mecanizacao` e transforme a descoberta em gatilho, validação, artefato, checkpoint visual ou comando.
+
+---
+
+## Retroalimentação de escala
+
+Quando um projeto-folha revelar uma falha reutilizável do framework, rode `/retroalimentar`.
+
+O comando registra evidência local em `audits/framework/FRAMEWORK-FEEDBACK-XXX.md`, amarra o item em `PROJECT.md` dentro de `BACKLOG` / `Pendências no framework`, e prepara PR ou issue para o `logus-template`.
+
+PR ou issue remoto só é aberto depois de confirmação humana explícita.
+
+---
+
+## Agenda de alavancas
+
+Quando houver mais de um caminho plausível, rode `/agenda-alavancas`.
+
+O comando lê `PROJECT.md`, auditorias, backlog e feedbacks de framework para separar alavancas de Produto, Performance, Engenharia, Mecanização e Estratégia. Ele recomenda pelo maior retorno composto, mas não cria backlog paralelo nem altera escopo sem decisão humana.
 
 ---
 
@@ -146,12 +168,15 @@ Se o humano precisar lembrar que faltou desdobramento, checkpoint ou decisão, r
 | Termo | Significado |
 |-------|-------------|
 | Artefato | Documento, código ou registro que tornou consciente um algoritmo |
-| Sprint atômico | Pacote entregável de 3 dias, indivisível |
+| Sprint atômico | Pacote entregável indivisível; em datas usa `Fim = Início + 3 dias` |
 | Cadência curta | Checagem entre tasks ou no início de cada sessão |
 | Cadência longa | Auditoria ao fim de cada sprint |
 | Mutação | Mudança detectada na varredura entre estado atual e último estado validado |
-| Baseline | Commit ou tag que congela o estado validado no início do sprint |
+| Baseline | Commit ou tag registrado depois da declaração aprovada do sprint e antes da execução |
 | Auditoria adaptativa | Cinco varreduras com profundidade ajustada ao sprint |
 | PROJECT.md | Fonte única da verdade do projeto |
 | Render automático | Três páginas HTML geradas do PROJECT.md |
 | Desdobramento natural direcionado | O fim de um ciclo aponta naturalmente a próxima decisão necessária |
+| Retorno de escala | Evidência de projeto-folha que sobe como correção reutilizável para o logus-template |
+| Modo operacional | Forma atual de executar um artefato, separada da identidade estável |
+| Agenda de alavancas | Radar derivado dos artefatos oficiais para escolher a maior alavanca de retorno composto |

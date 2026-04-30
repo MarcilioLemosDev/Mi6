@@ -21,6 +21,14 @@ O desdobramento natural direcionado é a regra que fecha cada ciclo: ao concluir
 
 ---
 
+## Diálogos
+
+Os Diálogos são peças constitutivas do framework. Eles vivem em `dialogos/` na raiz do repositório, no mesmo nível de protocolo de `LOGUS.md`.
+
+Um Diálogo não substitui comando, validação ou template. Ele nomeia o princípio operacional que depois precisa ser mecanizado.
+
+---
+
 ## Identidade macro/micro
 
 O mesmo algoritmo LOGUS opera em todas as escalas:
@@ -67,12 +75,49 @@ registrar:    S5 -> S6
 1. `PROJECT.md` é a única fonte de verdade.
 2. `/public/` é derivada; nunca é editada manualmente.
 3. Todo sprint tem conquista observável, datas, baseline, tasks e critérios de aceite.
-4. Mutação não é classificada na entrada; é revelada por comparação e classificada na saída.
-5. A IA executa regra mecânica; o humano decide peso.
-6. O caminho até a resposta é privado; só a decisão final vira artefato.
-7. Auditoria gera evidência, não cerimônia.
-8. Todo ciclo operacional termina em desdobramento natural direcionado: próximo ponto de decisão humana explícito.
-9. O LOGUS não depende do humano lembrar o fluxo; se dependeu, houve falha de mecanização.
+4. Sprint atômico de 3 dias usa `Fim = Início + 3 dias`; `Fim` é limite de encerramento do ciclo, não dia adicional de trabalho.
+5. Baseline é registrado depois da declaração aprovada do sprint e antes de qualquer execução.
+6. Mutação não é classificada na entrada; é revelada por comparação e classificada na saída.
+7. A IA executa regra mecânica; o humano decide peso.
+8. O caminho até a resposta é privado; só a decisão final vira artefato.
+9. Auditoria gera evidência, não cerimônia.
+10. Invariante descreve identidade estável; regra transitória de modo operacional fica separada do contrato permanente.
+11. Todo ciclo operacional termina em desdobramento natural direcionado: próximo ponto de decisão humana explícito.
+12. O LOGUS não depende do humano lembrar o fluxo; se dependeu, houve falha de mecanização.
+13. Quando uma folha revela falha reutilizável do framework, a evidência fica na folha e a correção sobe para o tronco.
+14. A IA mantém agenda de alavancas derivada dos artefatos oficiais; agenda recomenda pelo maior retorno composto, humano decide peso.
+
+---
+
+## Identidade e modo operacional
+
+Ao definir agente, processo, serviço ou outro artefato operacional, separe:
+
+| Camada | Conteúdo | Onde declarar |
+|--------|----------|---------------|
+| Identidade | papel estável, limites permanentes e responsabilidade do artefato | contrato do artefato |
+| Modo operacional | forma atual de execução, ferramenta, cadência ou restrição da sprint | SPRINT ATUAL, processo ou seção de modo |
+| Regra transitória | condição temporária usada para provar uma hipótese | task, critério de aceite ou nota de sprint |
+
+Regra de modo só vira invariante quando o humano decide que ela deve sobreviver à mudança de ferramenta, agenda ou executor.
+
+---
+
+## Agenda de alavancas
+
+Agenda de alavancas é radar, não backlog paralelo. Ela deriva de `PROJECT.md`, auditorias, feedbacks de framework, backlog e estado atual para apresentar o movimento de maior retorno composto.
+
+| Eixo | Pergunta |
+|------|----------|
+| Produto | o que torna o software mais útil, vendável ou essencial? |
+| Performance | o que torna o software mais rápido, barato, confiável ou escalável? |
+| Engenharia | o que reduz fragilidade, ambiguidade, débito ou retrabalho? |
+| Mecanização | o que ainda depende de memória humana e deve virar regra, comando, validação ou artefato? |
+| Estratégia | o que aproxima a Awake de vantagem composta e defensável? |
+
+A agenda não altera sprint, backlog ou escopo sozinha. Ela apresenta alavancas e recomenda uma decisão; o humano transforma isso em sprint, task, backlog, auditoria, retroalimentação ou pausa.
+
+Critério superior: quando duas alavancas competirem, prefira a que gera vantagem composta para a Awake, melhorando o projeto atual e aumentando capacidade futura do tronco, do time, do método ou do sistema.
 
 ---
 
@@ -80,7 +125,7 @@ registrar:    S5 -> S6
 
 ```text
 1. Declarar NORTE, MAPA, STACK e SPRINT ATUAL no PROJECT.md
-2. Registrar Baseline no início do sprint
+2. Aprovar o sprint e registrar Baseline antes de qualquer execução
 3. Executar cadência curta antes de tocar código ou iniciar nova task
 4. Implementar apenas o que está declarado
 5. Validar o estado LOGUS antes de render ou auditoria
@@ -98,13 +143,14 @@ registrar:    S5 -> S6
 | Evento | Tipo | Agente | Ação |
 |--------|------|--------|------|
 | Início de sessão | regra | IA | executar `/cadencia-curta` |
-| Início de sprint | peso | humano | aprovar conquista, datas, baseline e receita |
+| Início de sprint | peso | humano | aprovar conquista, datas, receita e baseline pós-declaração |
 | Início de task | regra | IA | perguntar se a hipótese ainda é verdade |
 | Fim de task | regra | IA | validar, renderizar, mostrar checkpoint visual e pedir `ok` para seguir |
 | Fim de ciclo operacional | regra | IA | apresentar desdobramento natural direcionado para próxima decisão humana |
-| Fim de sprint | regra | IA | sugerir `/auditoria-sprint` |
-| Fim de auditoria | regra | IA | apresentar próximo ponto de peso ao humano |
+| Fim de sprint | regra | IA | sugerir `/auditoria-sprint` e, se houver múltiplos caminhos, `/agenda-alavancas` |
+| Fim de auditoria | regra | IA | apresentar próximo ponto de peso e agenda de alavancas |
 | Falha de fluxo percebida | regra | IA | rodar auditoria de mecanização do LOGUS |
+| Retorno de escala percebido | regra | IA | sugerir `/retroalimentar` |
 | Destino de achado | peso | humano | escolher `task-próximo-sprint`, `aceita` ou `backlog` |
 | Mutação macro | peso | humano | ajustar MAPA, BACKLOG ou SPRINT ATUAL |
 | Push relevante | regra | GitHub Actions | regenerar `/public/` |

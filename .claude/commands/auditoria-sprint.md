@@ -8,7 +8,7 @@ Leia `PROJECT.md` e extraia:
 - `Sprint` (ex: S01)
 - `Conquista`
 - `Início` e `Fim`
-- `Baseline` (commit ou tag validado no início do sprint)
+- `Baseline` (commit ou tag registrado depois da declaração aprovada do sprint e antes da execução)
 - Tabela "Gatilhos deste sprint" (para respeitar regra vs peso)
 - Tabela "Receita de auditoria" (profundidade de cada subagent)
 - Tabela "Tasks" (para verificadores de spec e trajetória)
@@ -24,6 +24,8 @@ Se a validação falhar, pare e reporte os itens ao humano. Não audite estado i
 Se qualquer campo obrigatório for placeholder (`[...]`), pare imediatamente com mensagem:
 > "Sprint não definido em PROJECT.md. Preencha SPRINT ATUAL (conquista, datas, baseline, receita de auditoria) antes de rodar auditoria."
 
+Se houver indício de que o baseline aponta para template ou estado anterior à declaração aprovada do sprint, registre achado de trajetória e sinalize falha de mecanização. Não trate como detalhe operacional.
+
 Não invente valores. Não assuma defaults.
 
 ---
@@ -38,7 +40,7 @@ Dispare em **paralelo** via Agent tool, cada um com contexto isolado:
 - **cacador** — sempre profundo. Escopo: código do sprint atual.
 - **otimizador** — profundidade conforme receita. Escopo: código do sprint atual.
 - **verificador-spec** — sempre profundo. Escopo: tasks do sprint + critérios de aceite do PROJECT.md.
-- **verificador-trajetoria** — sempre profundo. Escopo: estado atual vs. Baseline declarado no início do sprint.
+- **verificador-trajetoria** — sempre profundo. Escopo: estado atual vs. Baseline pós-declaração aprovado no início do sprint.
 
 Aguarde todos terminarem antes de prosseguir.
 
@@ -48,6 +50,8 @@ Agrupe todos os achados numa lista unificada ordenada por impacto:
 `crítico → alto → médio → baixo`
 
 Para cada achado: impacto | categoria | subagent | localização | descrição | sugestão
+
+Se algum achado indicar falha reutilizável do framework, não classifique apenas como backlog de produto. Sinalize como retorno de escala e pergunte se deve executar `/retroalimentar`.
 
 ### 3. Proponha destino por classificação (Diálogo VI — regra mecânica)
 
@@ -98,8 +102,9 @@ Informe:
 - Linha adicionada em `PROJECT.md` seção AUDITORIAS
 - Estado visual atualizado em `/health`
 - Próximo ponto de peso: qual conquista entra no próximo sprint?
+- Agenda de alavancas: produto, performance, engenharia, mecanização e estratégia, ou sugestão explícita de `/agenda-alavancas` se a escolha exigir comparação.
 
-Apresente as opções já declaradas em `PRÓXIMOS` e uma recomendação objetiva. Não encerre a auditoria sem colocar essa decisão na frente do humano.
+Apresente as opções já declaradas em `PRÓXIMOS`, uma recomendação objetiva e a alavanca de maior retorno esperado. Não encerre a auditoria sem colocar essa decisão na frente do humano.
 
 ### 7. Próximo ponto obrigatório
 
