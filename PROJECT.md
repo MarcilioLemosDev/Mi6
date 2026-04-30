@@ -72,7 +72,7 @@
 | ID | Task | Critério de aceite | Status |
 |----|------|--------------------|--------|
 | T01 | Definir a estrutura versionada do primeiro agente `observador-bacen` | Existe `agentes/observador-bacen/` com `agent.md`, subpasta `processos/`, ausência de `tools/` vazio, e `runs/` tratado como diretório local gitignored. | done |
-| T02 | Escrever o contrato do agente em `agent.md` | `agent.md` tem frontmatter operacional neutro, sem amarrar o agente a produto ou modelo específico, e corpo em linguagem natural com papel, limites, regras de execução, forma de registrar runs e obrigação de validação humana. | todo |
+| T02 | Escrever o contrato do agente em `agent.md` | `agent.md` tem frontmatter operacional neutro, sem amarrar o agente a produto ou modelo específico, e corpo em linguagem natural com papel, limites, regras de execução, forma de registrar runs e obrigação de validação humana. | done |
 | T03 | Escrever o processo `monitorar-comunicados-diarios.md` | O processo descreve disparo manual, objetivo, entradas, passos, limites contra instruções vindas de conteúdo externo, critérios de extração, formato de resumo, registro da execução e checkpoint para humano marcar como concluído de fato. | todo |
 | T04 | Executar uma primeira run manual do agente via terminal | A IA lê diretamente `agent.md` e o processo, consulta os comunicados diários do Bacen, registra a execução em `runs/`, apresenta resultado ao humano e pede confirmação de conclusão de fato. Se a fonte estiver vazia ou indisponível, a run ainda é válida se registrar evidência da consulta, classificar o resultado como “sem comunicado encontrado” ou “consulta indisponível”, e submeter o checkpoint ao humano. | todo |
 
@@ -97,6 +97,7 @@
 - Avaliar se runs locais precisam gerar resumos versionados sem expor logs brutos.
 - Avaliar mitigação técnica para prompt injection em conteúdo externo se o primeiro processo mostrar risco recorrente.
 - Após S01, decidir e mecanizar a convenção de duração do sprint atômico: manter `Fim = Início + 3 dias` como 4 dias de calendário e declarar explicitamente no LOGUS, ou alterar `validate.py` conforme a convenção escolhida.
+- Verificador de Trajetória deve avaliar na auditoria S01 se a regra `Execute apenas o processo solicitado manualmente pelo humano no terminal` é invariante real do agente ou regra do modo de operação manual; agendamento automático futuro exigirá reescrita dessa regra.
 
 ---
 
