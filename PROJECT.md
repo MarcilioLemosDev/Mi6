@@ -71,7 +71,7 @@
 
 | ID | Task | Critério de aceite | Status |
 |----|------|--------------------|--------|
-| T01 | Definir a estrutura versionada do primeiro agente `observador-bacen` | Existe `agentes/observador-bacen/` com `agent.md`, subpasta `processos/`, ausência de `tools/` vazio, e `runs/` tratado como diretório local gitignored. | todo |
+| T01 | Definir a estrutura versionada do primeiro agente `observador-bacen` | Existe `agentes/observador-bacen/` com `agent.md`, subpasta `processos/`, ausência de `tools/` vazio, e `runs/` tratado como diretório local gitignored. | done |
 | T02 | Escrever o contrato do agente em `agent.md` | `agent.md` tem frontmatter operacional neutro, sem amarrar o agente a produto ou modelo específico, e corpo em linguagem natural com papel, limites, regras de execução, forma de registrar runs e obrigação de validação humana. | todo |
 | T03 | Escrever o processo `monitorar-comunicados-diarios.md` | O processo descreve disparo manual, objetivo, entradas, passos, limites contra instruções vindas de conteúdo externo, critérios de extração, formato de resumo, registro da execução e checkpoint para humano marcar como concluído de fato. | todo |
 | T04 | Executar uma primeira run manual do agente via terminal | A IA lê diretamente `agent.md` e o processo, consulta os comunicados diários do Bacen, registra a execução em `runs/`, apresenta resultado ao humano e pede confirmação de conclusão de fato. Se a fonte estiver vazia ou indisponível, a run ainda é válida se registrar evidência da consulta, classificar o resultado como “sem comunicado encontrado” ou “consulta indisponível”, e submeter o checkpoint ao humano. | todo |
