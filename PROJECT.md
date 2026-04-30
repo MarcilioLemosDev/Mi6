@@ -37,11 +37,11 @@
 
 ## SPRINT ATUAL
 
-**Sprint:** S01
-**Conquista:** Um agente nomeado existe como pasta, tem um processo descrito em linguagem natural, executa esse processo quando disparado manualmente via terminal, registra o que fez e apresenta resultado para o humano conferir e marcar como concluído de fato.
+**Sprint:** S02
+**Conquista:** O `observador-bacen` consulta comunicados do Bacen por caminho tecnicamente confiável, distingue `zero comunicados` de `consulta indisponível`, separa identidade do agente de modo manual e registra fuso operacional em toda run.
 **Início:** 2026-04-30
 **Fim:** 2026-05-03
-**Baseline:** db8fe04c16ad88bdfc50ec4b6b858b46804ab995
+**Baseline:** S02-baseline
 
 ### Gatilhos deste sprint
 
@@ -62,20 +62,21 @@
 
 | Subagent | Profundidade | Justificativa |
 |----------|-------------|---------------|
-| Sentinela | leve | S01 não persiste dado sensível, não mexe em autenticação e não cria runner. Ainda assim há superfície real: IA com tool-use lendo conteúdo externo não confiável, risco de prompt injection, comandos não previstos e vazamento em `runs/`. A varredura leve deve verificar se esses limites estão declarados no processo e se `runs/` está gitignored; mitigação técnica mais pesada fica fora do escopo salvo achado crítico. |
-| Caçador | profundo | Sempre profundo. Deve procurar fragilidade operacional na abstração `pasta = agente`, especialmente ambiguidade de processo, ausência de critério de conclusão, dependência de memória humana e falhas previsíveis quando a fonte Bacen estiver vazia ou indisponível. |
-| Otimizador | leve | S01 não busca performance nem automação; busca clareza. A varredura leve deve avaliar se a execução manual é enxuta o bastante para provar a abstração sem introduzir runner, ferramenta ou estrutura prematura. |
-| Verificador de Spec | profundo | Sempre profundo. Deve comparar cada task e critério de aceite com os artefatos criados e com a run manual executada. |
-| Verificador de Trajetória | profundo | Sempre profundo. O risco principal é desviar para runner, automação, compliance ou arquitetura genérica antes de provar o primeiro agente ponta a ponta. |
+| Sentinela | profundo | S02 pode introduzir endpoint dinâmico, fetch estruturado, headless ou ferramenta local para consultar fonte externa não confiável. A varredura deve revisar limites contra prompt injection, acesso fora de escopo e vazamento em `runs/`. |
+| Caçador | profundo | Sempre profundo. Deve procurar falso negativo em `sem comunicados`, ambiguidade entre consulta vazia e indisponível, falhas de fuso, fragilidade no caminho técnico escolhido e dependência de inferência humana. |
+| Otimizador | profundo | S02 escolhe caminho técnico de consulta. A varredura deve avaliar simplicidade, custo, repetibilidade e se uma ferramenta local só foi criada quando necessária. |
+| Verificador de Spec | profundo | Sempre profundo. Deve comparar tasks e critérios de aceite com o processo atualizado, contrato do agente e run manual S02. |
+| Verificador de Trajetória | profundo | Sempre profundo. O risco principal é desviar para runner/agendamento amplo antes de provar consulta confiável do primeiro agente. |
 
 ### Tasks
 
 | ID | Task | Critério de aceite | Status |
 |----|------|--------------------|--------|
-| T01 | Definir a estrutura versionada do primeiro agente `observador-bacen` | Existe `agentes/observador-bacen/` com `agent.md`, subpasta `processos/`, ausência de `tools/` vazio, e `runs/` tratado como diretório local gitignored. | done |
-| T02 | Escrever o contrato do agente em `agent.md` | `agent.md` tem frontmatter operacional neutro, sem amarrar o agente a produto ou modelo específico, e corpo em linguagem natural com papel, limites, regras de execução, forma de registrar runs e obrigação de validação humana. | done |
-| T03 | Escrever o processo `monitorar-comunicados-diarios.md` | O processo descreve disparo manual, objetivo, entradas, passos, limites contra instruções vindas de conteúdo externo, critérios de extração, formato de resumo, registro da execução e checkpoint para humano marcar como concluído de fato. | done |
-| T04 | Executar uma primeira run manual do agente via terminal | A IA lê diretamente `agent.md` e o processo, consulta os comunicados diários do Bacen, registra a execução em `runs/`, apresenta resultado ao humano e pede confirmação de conclusão de fato. Se a fonte estiver vazia ou indisponível, a run ainda é válida se registrar evidência da consulta, classificar o resultado como “sem comunicado encontrado” ou “consulta indisponível”, e submeter o checkpoint ao humano. | done |
+| T01 | Investigar e declarar o caminho técnico confiável para consultar comunicados do Bacen | O processo registra o caminho escolhido para obter resultados renderizados ou estruturados da busca Bacen; se exigir ferramenta local, ela existe em `agentes/observador-bacen/tools/` com nome e uso necessários, sem runner ou agendamento amplo. | todo |
+| T02 | Atualizar o processo para provar `zero comunicados` antes de classificar vazio | `monitorar-comunicados-diarios.md` exige evidência explícita de vazio verdadeiro, como contador, mensagem da fonte, resposta estruturada ou lista renderizada vazia; sem essa prova, a classificação obrigatória é `consulta indisponível`. | todo |
+| T03 | Separar identidade do agente e modo operacional manual | `agent.md` mantém invariantes permanentes do Observador Bacen separados de uma seção de modo operacional atual; a regra de execução manual deixa de ser invariante de identidade. | todo |
+| T04 | Declarar fuso operacional do processo | O processo declara `America/Sao_Paulo` como fuso operacional da rotina Bacen/Mi6 e exige registro de fuso e fonte de data em toda run. | todo |
+| T05 | Executar uma run manual S02 com o processo atualizado | A run lê `agent.md` e o processo atualizados, usa o caminho técnico escolhido, registra evidência suficiente para `sem comunicados`, `N comunicados` ou `consulta indisponível`, apresenta checkpoint humano e pede validação de conclusão de fato. | todo |
 
 ---
 
@@ -83,8 +84,8 @@
 
 | Sprint | Conquista planejada |
 |--------|---------------------|
-| S02 | Resolver a consulta dinâmica da busca pública do Bacen e os ajustes de auditoria que bloqueiam execução real: evidência mínima para `sem comunicado encontrado`, MECHANIZATION-003 sobre baseline de sprint e separação entre identidade do agente e modo manual. |
-| S03 | A definir após S02; candidatos naturais são agendamento operacional do `observador-bacen` ou próximo agente da Mi6. |
+| S03 | Agendamento operacional do `observador-bacen` se S02 provar consulta confiável; caso contrário, aprofundar o caminho técnico da fonte Bacen. |
+| S04 | A definir após S03; candidatos naturais são próximo agente da Mi6, publicação de `/status` ou mecanização de runner. |
 
 ---
 
@@ -97,7 +98,6 @@
 - Publicar `/status`, `/sprint` e `/health` quando houver necessidade de visualização externa.
 - Avaliar se runs locais precisam gerar resumos versionados sem expor logs brutos.
 - Avaliar mitigação técnica para prompt injection em conteúdo externo se o primeiro processo mostrar risco recorrente.
-- Antes de qualquer agendamento automático, declarar fuso operacional do agente (`America/Sao_Paulo` ou convenção escolhida) e registrar fuso/fonte de data em toda run.
 
 ### Pendências no framework
 
