@@ -4,8 +4,8 @@
 **Origem:** AUDIT-S01, achado 3 do Verificador de Trajetoria
 **Projeto-folha:** Mi6
 **Tronco alvo:** logus-template
-**Status:** aberto
-**Link remoto:** pendente
+**Status:** mergeado
+**Link remoto:** https://github.com/MarcilioLemosDev/logus-template/commit/84e5eff8fd1aeb5a9870724c48a9ee1626003d78
 
 ---
 
@@ -43,4 +43,4 @@ Arquivos provaveis:
 
 ## Fechamento
 
-Item so fecha quando o PR no `logus-template` for mergeado, ou quando houver decisao explicita de recusa.
+Fechado pelo commit `84e5eff8fd1aeb5a9870724c48a9ee1626003d78` no `logus-template`.

@@ -101,9 +101,9 @@
 
 ### Pendências no framework
 
-- [ ] FRAMEWORK-FEEDBACK-001 - Convencao de sprint de 3 dias - status: aberto - PR/issue: pendente
-- [ ] FRAMEWORK-FEEDBACK-002 - Baseline antes da execucao da sprint - status: aberto - PR/issue: pendente
-- [ ] FRAMEWORK-FEEDBACK-003 - Invariante do agente vs modo de operacao - status: aberto - PR/issue: pendente
+- [x] FRAMEWORK-FEEDBACK-001 - Convencao de sprint de 3 dias - status: mergeado - PR/issue: https://github.com/MarcilioLemosDev/logus-template/commit/84e5eff8fd1aeb5a9870724c48a9ee1626003d78
+- [x] FRAMEWORK-FEEDBACK-002 - Baseline antes da execucao da sprint - status: mergeado - PR/issue: https://github.com/MarcilioLemosDev/logus-template/commit/84e5eff8fd1aeb5a9870724c48a9ee1626003d78
+- [x] FRAMEWORK-FEEDBACK-003 - Invariante do agente vs modo de operacao - status: mergeado - PR/issue: https://github.com/MarcilioLemosDev/logus-template/commit/84e5eff8fd1aeb5a9870724c48a9ee1626003d78
 
 ---
 
